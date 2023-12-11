@@ -20,9 +20,12 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<ThemeName>(
-    (localStorage.getItem(THEME_STORAGE_KEY) as ThemeName) ?? "system"
-  );
+  const [mode, setMode] = useState<ThemeName>("system");
+
+  useEffect(() => {
+    const currentTheme = localStorage.getItem(THEME_STORAGE_KEY) as ThemeName;
+    setMode(currentTheme);
+  }, []);
 
   useEffect(() => {
     const currentTheme = localStorage.getItem(THEME_STORAGE_KEY);
