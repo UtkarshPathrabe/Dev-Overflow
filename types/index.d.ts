@@ -54,3 +54,8 @@ export interface BadgeCounts {
 }
 
 export type BadgeCriteriaType = keyof typeof BADGE_CRITERIA;
+
+export interface IFilterOptions {
+  name: string;
+  value: string;
+}
