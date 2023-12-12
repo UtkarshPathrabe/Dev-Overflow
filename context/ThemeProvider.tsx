@@ -1,5 +1,7 @@
 "use client";
 
+import { THEME_STORAGE_KEY } from "@/constants/StorageKeys";
+import { ThemeName } from "@/types";
 import {
   createContext,
   useContext,
@@ -11,20 +13,30 @@ import {
 } from "react";
 
 interface ThemeContextType {
-  mode: string;
-  setMode: Dispatch<SetStateAction<string>>;
+  mode: ThemeName;
+  setMode: Dispatch<SetStateAction<ThemeName>>;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState("");
+  const [mode, setMode] = useState<ThemeName>("system");
 
   useEffect(() => {
-    if (mode === "dark") {
+    const currentTheme = localStorage.getItem(THEME_STORAGE_KEY) as ThemeName;
+    setMode(currentTheme);
+  }, []);
+
+  useEffect(() => {
+    const currentTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    if (
+      currentTheme === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
       document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
     }
   }, [mode]);
 
