@@ -1,6 +1,6 @@
 "use client";
 
-import { THEME_STORAGE_KEY } from "@/constants/storageKeys";
+import { THEME_STORAGE_KEY } from "@/constants";
 import { ThemeName } from "@/types";
 import {
   createContext,
