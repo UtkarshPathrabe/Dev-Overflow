@@ -15,11 +15,11 @@ const questions = [
       { _id: "1", name: "react" },
       { _id: "2", name: "javascript" },
     ],
-    author: { _id: "1", name: "John Doe", picture: "url_to_picture" },
+    author: { _id: "1", name: "John Doe", picture: "/assets/icons/avatar.svg" },
     upvotes: 10,
     views: 100,
     answers: [],
-    createdAt: new Date("2021-09-01T12:10:01.000Z"),
+    createdAt: new Date("2023-09-01T12:10:01.000Z"),
   },
   {
     _id: "2",
@@ -29,11 +29,11 @@ const questions = [
       { _id: "2", name: "react" },
       { _id: "3", name: "webdev" },
     ],
-    author: { _id: "2", name: "Jane Doe", picture: "url_to_picture" },
+    author: { _id: "2", name: "Jane Doe", picture: "/assets/icons/avatar.svg" },
     upvotes: 10,
     views: 100,
     answers: [],
-    createdAt: new Date("2021-09-01T20:01:39.000Z"),
+    createdAt: new Date("2023-11-01T20:01:39.000Z"),
   },
 ];
 
