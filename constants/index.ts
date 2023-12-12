@@ -75,3 +75,5 @@ export const BADGE_CRITERIA = {
     GOLD: 100000,
   },
 };
+
+export const THEME_STORAGE_KEY = "theme";
