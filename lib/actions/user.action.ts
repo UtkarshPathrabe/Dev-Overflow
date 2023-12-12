@@ -46,13 +46,10 @@ export async function createUser(userData: CreateUserParams) {
 export async function updateUser(params: UpdateUserParams) {
   try {
     connectToDatabase();
-
     const { clerkId, updateData, path } = params;
-
     await User.findOneAndUpdate({ clerkId }, updateData, {
       new: true,
     });
-
     revalidatePath(path);
   } catch (error) {
     console.log(error);
@@ -63,15 +60,11 @@ export async function updateUser(params: UpdateUserParams) {
 export async function deleteUser(params: DeleteUserParams) {
   try {
     connectToDatabase();
-
     const { clerkId } = params;
-
     const user = await User.findOneAndDelete({ clerkId });
-
     if (!user) {
       throw new Error("User not found");
     }
-
     // Delete user from database
     // and questions, answers, comments, etc.
 
@@ -80,11 +73,8 @@ export async function deleteUser(params: DeleteUserParams) {
 
     // delete user questions
     await Question.deleteMany({ author: user._id });
-
     // TODO: delete user answers, comments, etc.
-
     const deletedUser = await User.findByIdAndDelete(user._id);
-
     return deletedUser;
   } catch (error) {
     console.log(error);
