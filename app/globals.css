@@ -21,6 +21,10 @@ body {
     @apply flex justify-start items-center;
   }
 
+  .flex-end {
+    @apply flex justify-end items-center;
+  }
+
   .card-wrapper {
     @apply bg-light-900 dark:dark-gradient shadow-light-100 dark:shadow-dark-100;
   }
