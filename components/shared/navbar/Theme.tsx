@@ -1,7 +1,6 @@
 "use client";
 
-import { themes } from "@/constants";
-import { THEME_STORAGE_KEY } from "@/constants/storageKeys";
+import { THEME_STORAGE_KEY, themes } from "@/constants";
 import { useTheme } from "@/context/ThemeProvider";
 import { ThemeName } from "@/types";
 import {
