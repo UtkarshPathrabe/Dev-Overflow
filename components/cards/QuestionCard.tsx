@@ -2,16 +2,21 @@ import Link from "next/link";
 import RenderTag from "../shared/RenderTag";
 import Metric from "../shared/Metric";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
+import { IQuestion } from "@/database/question.model";
+import { ITag } from "@/database/tag.model";
+import { IUser } from "@/database/user.model";
+import { IAnswer } from "@/database/answer.model";
 
 interface QuestionProps {
-  _id: string;
-  title: string;
-  tags: { _id: string; name: string }[];
-  author: { _id: string; name: string; picture: string };
-  upvotes: number;
-  views: number;
-  answers: Array<object>;
-  createdAt: Date;
+  _id: IQuestion["_id"];
+  title: IQuestion["title"];
+  tags: ITag[];
+  author: IUser;
+  upvotes: IUser[];
+  downvotes: IUser[];
+  views: IQuestion["views"];
+  answers: IAnswer[];
+  createdAt: IQuestion["createdAt"];
 }
 
 const QuestionCard = ({
@@ -20,6 +25,7 @@ const QuestionCard = ({
   tags,
   author,
   upvotes,
+  downvotes,
   views,
   answers,
   createdAt,
@@ -58,9 +64,16 @@ const QuestionCard = ({
         </div>
         <div className="flex-end flex-wrap gap-3">
           <Metric
-            imgUrl="/assets/icons/like.svg"
+            imgUrl="/assets/icons/upvote.svg"
             alt="Upvotes"
-            value={formatAndDivideNumber(upvotes)}
+            value={formatAndDivideNumber(upvotes.length)}
+            title=" Votes"
+            textStyles="small-medium text-dark400_light800"
+          />
+          <Metric
+            imgUrl="/assets/icons/downvote.svg"
+            alt="Downvotes"
+            value={formatAndDivideNumber(downvotes.length)}
             title=" Votes"
             textStyles="small-medium text-dark400_light800"
           />
