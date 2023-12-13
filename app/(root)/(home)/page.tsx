@@ -10,6 +10,7 @@ import Link from "next/link";
 
 export default async function Home() {
   const { questions } = await getQuestions({});
+  console.log(questions);
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -45,6 +46,7 @@ export default async function Home() {
               tags={question.tags}
               author={question.author}
               upvotes={question.upvotes}
+              downvotes={question.downvotes}
               views={question.views}
               answers={question.answers}
               createdAt={question.createdAt}
