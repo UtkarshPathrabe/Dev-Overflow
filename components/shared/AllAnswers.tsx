@@ -39,8 +39,8 @@ const AllAnswers = async ({
 
       <div>
         {result.answers.map((answer) => (
-          <article key={answer._id} className="light-border border-b py-10">
-            <div className="mb-8 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
+          <article key={answer._id} className="py-4">
+            <div className="mb-2 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
               <Link
                 href={`/profile/${answer.author.clerkId}`}
                 className="flex flex-1 items-start gap-1 sm:items-center">
@@ -51,13 +51,12 @@ const AllAnswers = async ({
                   alt="profile"
                   className="rounded-full object-cover max-sm:mt-0.5"
                 />
-                <div className="flex flex-col sm:flex-row sm:items-center">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center">
                   <p className="body-semibold text-dark300_light700">
                     {answer.author.name}
                   </p>
-
                   <p className="small-regular text-light400_light500 ml-0.5 mt-0.5 line-clamp-1">
-                    answered {getTimestamp(answer.createdAt)}
+                    • answered {getTimestamp(answer.createdAt)}
                   </p>
                 </div>
               </Link>
@@ -78,7 +77,7 @@ const AllAnswers = async ({
         ))}
       </div>
 
-      <div className="mt-10 w-full">
+      <div className="mt-4 w-full">
         <Pagination
           pageNumber={page ? +page : 1}
           isNext={result.isNextAnswer}
