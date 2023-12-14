@@ -124,17 +124,12 @@ export async function getAllUsers(params: GetAllUsersParams) {
 export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
   try {
     connectToDatabase();
-
     const { userId, questionId, path } = params;
-
     const user = await User.findById(userId);
-
     if (!user) {
       throw new Error("User not found");
     }
-
     const isQuestionSaved = user.saved.includes(questionId);
-
     if (isQuestionSaved) {
       // remove question from saved
       await User.findByIdAndUpdate(
@@ -150,7 +145,6 @@ export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
         { new: true }
       );
     }
-
     revalidatePath(path);
   } catch (error) {
     console.log(error);
@@ -362,12 +356,3 @@ export async function getUserAnswers(params: GetUserStatsParams) {
     throw error;
   }
 }
-
-// export async function getAllUsers(params: GetAllUsersParams) {
-//   try {
-//     connectToDatabase();
-//   } catch (error) {
-//     console.log(error);
-//     throw error;
-//   }
-// }
