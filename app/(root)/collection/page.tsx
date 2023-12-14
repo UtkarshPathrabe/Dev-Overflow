@@ -32,7 +32,6 @@ export default async function Home({ searchParams }: SearchParamsProps) {
           placeholder="Search for questions"
           otherClasses="flex-1"
         />
-
         <Filter
           filters={QuestionFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
@@ -57,8 +56,8 @@ export default async function Home({ searchParams }: SearchParamsProps) {
           ))
         ) : (
           <NoResult
-            title="There’s no question saved to show"
-            description="Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡"
+            title="There’s no saved questions to show"
+            description="Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. Your query could be the next big thing others learn from. Get involved! 💡"
             link="/ask-question"
             linkTitle="Ask a Question"
           />
