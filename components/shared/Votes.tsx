@@ -10,7 +10,7 @@ import { toggleSaveQuestion } from "@/lib/actions/user.action";
 import { formatAndDivideNumber } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { toast } from "../ui/use-toast";
 
 interface Props {
@@ -37,7 +37,14 @@ const Votes = ({
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
+    if (!userId) {
+      return toast({
+        title: "Please log in",
+        description: "You must be logged in to perform this action",
+      });
+    }
+
     await toggleSaveQuestion({
       userId: JSON.parse(userId),
       questionId: JSON.parse(itemId),
@@ -50,66 +57,69 @@ const Votes = ({
       } your collection`,
       variant: !hasSaved ? "default" : "destructive",
     });
-  };
+  }, [hasSaved, itemId, pathname, userId]);
 
-  const handleVote = async (action: string) => {
-    if (!userId) {
-      return toast({
-        title: "Please log in",
-        description: "You must be logged in to perform this action",
-      });
-    }
-
-    if (action === "upvote") {
-      if (type === "Question") {
-        await upvoteQuestion({
-          questionId: JSON.parse(itemId),
-          userId: JSON.parse(userId),
-          hasupVoted,
-          hasdownVoted,
-          path: pathname,
-        });
-      } else if (type === "Answer") {
-        await upvoteAnswer({
-          answerId: JSON.parse(itemId),
-          userId: JSON.parse(userId),
-          hasupVoted,
-          hasdownVoted,
-          path: pathname,
+  const handleVote = useCallback(
+    async (action: string) => {
+      if (!userId) {
+        return toast({
+          title: "Please log in",
+          description: "You must be logged in to perform this action",
         });
       }
 
-      return toast({
-        title: `Upvote ${!hasupVoted ? "Successful" : "Removed"}`,
-        variant: !hasupVoted ? "default" : "destructive",
-      });
-    }
+      if (action === "upvote") {
+        if (type === "Question") {
+          await upvoteQuestion({
+            questionId: JSON.parse(itemId),
+            userId: JSON.parse(userId),
+            hasupVoted,
+            hasdownVoted,
+            path: pathname,
+          });
+        } else if (type === "Answer") {
+          await upvoteAnswer({
+            answerId: JSON.parse(itemId),
+            userId: JSON.parse(userId),
+            hasupVoted,
+            hasdownVoted,
+            path: pathname,
+          });
+        }
 
-    if (action === "downvote") {
-      if (type === "Question") {
-        await downvoteQuestion({
-          questionId: JSON.parse(itemId),
-          userId: JSON.parse(userId),
-          hasupVoted,
-          hasdownVoted,
-          path: pathname,
-        });
-      } else if (type === "Answer") {
-        await downvoteAnswer({
-          answerId: JSON.parse(itemId),
-          userId: JSON.parse(userId),
-          hasupVoted,
-          hasdownVoted,
-          path: pathname,
+        return toast({
+          title: `Upvote ${!hasupVoted ? "Successful" : "Removed"}`,
+          variant: !hasupVoted ? "default" : "destructive",
         });
       }
 
-      return toast({
-        title: `Downvote ${!hasdownVoted ? "Successful" : "Removed"}`,
-        variant: !hasdownVoted ? "default" : "destructive",
-      });
-    }
-  };
+      if (action === "downvote") {
+        if (type === "Question") {
+          await downvoteQuestion({
+            questionId: JSON.parse(itemId),
+            userId: JSON.parse(userId),
+            hasupVoted,
+            hasdownVoted,
+            path: pathname,
+          });
+        } else if (type === "Answer") {
+          await downvoteAnswer({
+            answerId: JSON.parse(itemId),
+            userId: JSON.parse(userId),
+            hasupVoted,
+            hasdownVoted,
+            path: pathname,
+          });
+        }
+
+        return toast({
+          title: `Downvote ${!hasdownVoted ? "Successful" : "Removed"}`,
+          variant: !hasdownVoted ? "default" : "destructive",
+        });
+      }
+    },
+    [hasdownVoted, hasupVoted, itemId, pathname, type, userId]
+  );
 
   useEffect(() => {
     viewQuestion({
