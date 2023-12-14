@@ -88,6 +88,14 @@ const Answer = ({ question, questionId, authorId }: Props) => {
 
   const isDarkMode = useMemo(() => mode === "dark", [mode]);
 
+  if (!authorId) {
+    return (
+      <h4 className="paragraph-semibold text-dark400_light800">
+        Please login to answer this question.
+      </h4>
+    );
+  }
+
   return (
     <div>
       <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
