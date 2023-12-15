@@ -6,6 +6,8 @@ import { IQuestion } from "@/database/question.model";
 import { ITag } from "@/database/tag.model";
 import { IUser } from "@/database/user.model";
 import { IAnswer } from "@/database/answer.model";
+import { SignedIn } from "@clerk/nextjs";
+import EditDeleteAction from "../shared/EditDeleteAction";
 
 interface QuestionProps {
   _id: IQuestion["_id"];
@@ -17,6 +19,7 @@ interface QuestionProps {
   views: IQuestion["views"];
   answers: IAnswer[];
   createdAt: IQuestion["createdAt"];
+  clerkId?: string | null;
 }
 
 const QuestionCard = ({
@@ -29,7 +32,10 @@ const QuestionCard = ({
   views,
   answers,
   createdAt,
+  clerkId,
 }: QuestionProps) => {
+  const showActionButtons = clerkId && clerkId === author.clerkId;
+
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
@@ -43,7 +49,11 @@ const QuestionCard = ({
             </h3>
           </Link>
         </div>
-        {/* If signed in add and edit actions */}
+        <SignedIn>
+          {showActionButtons && (
+            <EditDeleteAction type="Question" itemId={JSON.stringify(_id)} />
+          )}
+        </SignedIn>
       </div>
       <div className="mt-3.5 flex flex-wrap gap-2">
         {tags.map((tag) => (
