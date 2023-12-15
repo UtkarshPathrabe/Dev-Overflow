@@ -23,6 +23,7 @@ import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { createQuestion, editQuestion } from "@/lib/actions/question.action";
+import { toast } from "../ui/use-toast";
 
 interface Props {
   type?: string;
@@ -37,8 +38,9 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const parsedQuestionDetails =
-    questionDetails && JSON.parse(questionDetails || "");
+  const parsedQuestionDetails = questionDetails
+    ? JSON.parse(questionDetails ?? "")
+    : {};
 
   const groupedTags = parsedQuestionDetails?.tags.map((tag: any) => tag.name);
 
@@ -75,6 +77,22 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
         router.push("/");
       }
     } catch (error) {
+      console.error(
+        `${
+          type === "Edit"
+            ? "Updating question failed. "
+            : "Posting question failed. "
+        } Details: `,
+        error
+      );
+      toast({
+        title: `${
+          type === "Edit"
+            ? "Updating question failed. "
+            : "Posting question failed. "
+        }`,
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -94,10 +112,8 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
     ) => {
       if (e.key === "Enter" && field.name === "tags") {
         e.preventDefault();
-
         const tagInput = e.target as HTMLInputElement;
-        const tagValue = tagInput.value.trim();
-
+        const tagValue = tagInput.value.trim().replace(/\s+/g, "");
         if (tagValue !== "") {
           if (tagValue.length > 15) {
             return form.setError("tags", {
@@ -131,10 +147,13 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
         "tags"
       >
     ) => {
+      if (type === "Edit") {
+        return;
+      }
       const newTags = field.value.filter((t: string) => t !== tag);
       form.setValue("tags", newTags);
     },
-    [form]
+    [form, type]
   );
 
   return (
@@ -182,7 +201,7 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
                   }}
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
-                  initialValue=""
+                  initialValue={parsedQuestionDetails?.content ?? ""}
                   init={{
                     height: 350,
                     menubar: false,
@@ -235,13 +254,18 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
                     className="no-focus paragraph-regular background-light800_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
                     placeholder="Add tags..."
                     onKeyDown={(e) => handleInputKeyDown(e, field)}
+                    disabled={type === "Edit"}
                   />
                   {field.value.length > 0 ? (
                     <div className="flex-start mt-2.5 gap-2.5">
                       {field.value.map((tag: string) => (
                         <Badge
                           key={tag}
-                          className="subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize"
+                          className={`subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize ${
+                            type === "Edit"
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
                           onClick={() => handleTagRemove(tag, field)}>
                           {tag}
                           <Image
@@ -249,7 +273,11 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
                             alt="close icon"
                             width={12}
                             height={12}
-                            className="cursor-pointer object-contain invert-0 dark:invert"
+                            className={`${
+                              type === "Edit"
+                                ? "cursor-not-allowed"
+                                : "cursor-pointer"
+                            } object-contain invert-0 dark:invert`}
                           />
                         </Badge>
                       ))}
@@ -270,9 +298,9 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
           className="primary-gradient w-fit !text-light-900"
           disabled={isSubmitting}>
           {isSubmitting ? (
-            <>{type === "Edit" ? "Editing..." : "Posting..."}</>
+            <>{type === "Edit" ? "Updating..." : "Posting..."}</>
           ) : (
-            <>{type === "Edit" ? "Edit Question" : "Ask a Question"}</>
+            <>{type === "Edit" ? "Update Question" : "Ask a Question"}</>
           )}
         </Button>
       </form>
