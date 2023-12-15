@@ -208,18 +208,13 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
 export async function getUserInfo(params: GetUserByIdParams) {
   try {
     connectToDatabase();
-
     const { userId } = params;
-
     const user = await User.findOne({ clerkId: userId });
-
     if (!user) {
       throw new Error("User not found");
     }
-
     const totalQuestions = await Question.countDocuments({ author: user._id });
     const totalAnswers = await Answer.countDocuments({ author: user._id });
-
     const [questionUpvotes] = await Question.aggregate([
       { $match: { author: user._id } },
       {
@@ -235,7 +230,6 @@ export async function getUserInfo(params: GetUserByIdParams) {
         },
       },
     ]);
-
     const [answerUpvotes] = await Answer.aggregate([
       { $match: { author: user._id } },
       {
@@ -251,7 +245,6 @@ export async function getUserInfo(params: GetUserByIdParams) {
         },
       },
     ]);
-
     const [questionViews] = await Answer.aggregate([
       { $match: { author: user._id } },
       {
@@ -261,7 +254,6 @@ export async function getUserInfo(params: GetUserByIdParams) {
         },
       },
     ]);
-
     const criteria = [
       { type: "QUESTION_COUNT" as BadgeCriteriaType, count: totalQuestions },
       { type: "ANSWER_COUNT" as BadgeCriteriaType, count: totalAnswers },
@@ -278,9 +270,7 @@ export async function getUserInfo(params: GetUserByIdParams) {
         count: questionViews?.totalViews || 0,
       },
     ];
-
     const badgeCounts = assignBadges({ criteria });
-
     return {
       user,
       totalQuestions,
