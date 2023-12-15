@@ -122,9 +122,7 @@ export const assignBadges = (params: BadgeParam) => {
     SILVER: 0,
     BRONZE: 0,
   };
-
   const { criteria } = params;
-
   criteria.forEach((item) => {
     const { type, count } = item;
     const badgeLevels: any = BADGE_CRITERIA[type];
@@ -135,6 +133,5 @@ export const assignBadges = (params: BadgeParam) => {
       }
     });
   });
-
   return badgeCounts;
 };
