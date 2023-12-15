@@ -33,11 +33,11 @@ const Profile = ({ clerkId, user }: Props) => {
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
-      name: parsedUser.name || "",
-      username: parsedUser.username || "",
-      portfolioWebsite: parsedUser.portfolioWebsite || "",
-      location: parsedUser.location || "",
-      bio: parsedUser.bio || "",
+      name: parsedUser.name ?? "",
+      username: parsedUser.username ?? "",
+      portfolioWebsite: parsedUser.portfolioWebsite ?? "",
+      location: parsedUser.location ?? "",
+      bio: parsedUser.bio ?? "",
     },
   });
 
@@ -85,7 +85,7 @@ const Profile = ({ clerkId, user }: Props) => {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
@@ -104,7 +104,7 @@ const Profile = ({ clerkId, user }: Props) => {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
@@ -124,7 +124,7 @@ const Profile = ({ clerkId, user }: Props) => {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
@@ -144,7 +144,7 @@ const Profile = ({ clerkId, user }: Props) => {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
@@ -164,7 +164,7 @@ const Profile = ({ clerkId, user }: Props) => {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
