@@ -44,7 +44,6 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
 
   const groupedTags = parsedQuestionDetails?.tags?.map((tag: any) => tag.name);
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof QuestionSchema>>({
     resolver: zodResolver(QuestionSchema),
     defaultValues: {
@@ -54,49 +53,51 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
     },
   });
 
-  // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof QuestionSchema>) {
-    setIsSubmitting(true);
-    try {
-      if (type === "Edit") {
-        await editQuestion({
-          questionId: parsedQuestionDetails._id,
-          title: values.title,
-          content: values.explanation,
-          path: pathname,
+  const onSubmit = useCallback(
+    async (values: z.infer<typeof QuestionSchema>) => {
+      setIsSubmitting(true);
+      try {
+        if (type === "Edit") {
+          await editQuestion({
+            questionId: parsedQuestionDetails._id,
+            title: values.title,
+            content: values.explanation,
+            path: pathname,
+          });
+          router.push(`/question/${parsedQuestionDetails._id}`);
+        } else {
+          await createQuestion({
+            title: values.title,
+            content: values.explanation,
+            tags: values.tags,
+            author: JSON.parse(mongoUserId),
+            path: pathname,
+          });
+          router.push("/");
+        }
+      } catch (error) {
+        console.error(
+          `${
+            type === "Edit"
+              ? "Updating question failed. "
+              : "Posting question failed. "
+          } Details: `,
+          error
+        );
+        toast({
+          title: `${
+            type === "Edit"
+              ? "Updating question failed. "
+              : "Posting question failed. "
+          }`,
+          variant: "destructive",
         });
-        router.push(`/question/${parsedQuestionDetails._id}`);
-      } else {
-        await createQuestion({
-          title: values.title,
-          content: values.explanation,
-          tags: values.tags,
-          author: JSON.parse(mongoUserId),
-          path: pathname,
-        });
-        router.push("/");
+      } finally {
+        setIsSubmitting(false);
       }
-    } catch (error) {
-      console.error(
-        `${
-          type === "Edit"
-            ? "Updating question failed. "
-            : "Posting question failed. "
-        } Details: `,
-        error
-      );
-      toast({
-        title: `${
-          type === "Edit"
-            ? "Updating question failed. "
-            : "Posting question failed. "
-        }`,
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
+    },
+    [mongoUserId, parsedQuestionDetails._id, pathname, router, type]
+  );
 
   const handleInputKeyDown = useCallback(
     (
