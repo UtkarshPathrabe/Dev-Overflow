@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { ProfileSchema } from "@/lib/validations";
 import { usePathname, useRouter } from "next/navigation";
 import { updateUser } from "@/lib/actions/user.action";
@@ -41,27 +41,30 @@ const Profile = ({ clerkId, user }: Props) => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof ProfileSchema>) {
-    setIsSubmitting(true);
-    try {
-      await updateUser({
-        clerkId,
-        updateData: {
-          name: values.name,
-          username: values.username,
-          portfolioWebsite: values.portfolioWebsite,
-          location: values.location,
-          bio: values.bio,
-        },
-        path: pathname,
-      });
-      router.back();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
+  const onSubmit = useCallback(
+    async (values: z.infer<typeof ProfileSchema>) => {
+      setIsSubmitting(true);
+      try {
+        await updateUser({
+          clerkId,
+          updateData: {
+            name: values.name,
+            username: values.username,
+            portfolioWebsite: values.portfolioWebsite,
+            location: values.location,
+            bio: values.bio,
+          },
+          path: pathname,
+        });
+        router.back();
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [clerkId, pathname, router]
+  );
 
   return (
     <Form {...form}>
