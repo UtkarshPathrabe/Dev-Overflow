@@ -60,10 +60,8 @@ export const getJoinedDate = (date: Date): string => {
   // Extract the month and year from the Date object
   const month = date.toLocaleString("default", { month: "long" });
   const year = date.getFullYear();
-
   // Create the joined date string (e.g., "September 2023")
   const joinedDate = `${month} ${year}`;
-
   return joinedDate;
 };
 
@@ -124,9 +122,7 @@ export const assignBadges = (params: BadgeParam) => {
     SILVER: 0,
     BRONZE: 0,
   };
-
   const { criteria } = params;
-
   criteria.forEach((item) => {
     const { type, count } = item;
     const badgeLevels: any = BADGE_CRITERIA[type];
@@ -137,6 +133,5 @@ export const assignBadges = (params: BadgeParam) => {
       }
     });
   });
-
   return badgeCounts;
 };

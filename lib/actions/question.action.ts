@@ -101,9 +101,7 @@ export async function createQuestion(params: CreateQuestionParams) {
 export async function getQuestionById(params: GetQuestionByIdParams) {
   try {
     connectToDatabase();
-
     const { questionId } = params;
-
     const question = await Question.findById(questionId)
       .populate({ path: "tags", model: Tag, select: "_id name" })
       .populate({
@@ -111,7 +109,6 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
         model: User,
         select: "_id clerkId name picture",
       });
-
     return question;
   } catch (error) {
     console.log(error);
@@ -122,11 +119,8 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
 export async function upvoteQuestion(params: QuestionVoteParams) {
   try {
     connectToDatabase();
-
     const { questionId, userId, hasupVoted, hasdownVoted, path } = params;
-
     let updateQuery = {};
-
     if (hasupVoted) {
       updateQuery = { $pull: { upvotes: userId } };
     } else if (hasdownVoted) {
@@ -137,25 +131,20 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
     } else {
       updateQuery = { $addToSet: { upvotes: userId } };
     }
-
     const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
       new: true,
     });
-
     if (!question) {
       throw new Error("Question not found");
     }
-
     // Increment author's reputation by +1/-1 for upvoting/revoking an upvote to the question
     await User.findByIdAndUpdate(userId, {
       $inc: { reputation: hasupVoted ? -1 : 1 },
     });
-
     // Increment author's reputation by +10/-10 for recieving an upvote/downvote to the question
     await User.findByIdAndUpdate(question.author, {
       $inc: { reputation: hasupVoted ? -10 : 10 },
     });
-
     revalidatePath(path);
   } catch (error) {
     console.log(error);
@@ -166,11 +155,8 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
 export async function downvoteQuestion(params: QuestionVoteParams) {
   try {
     connectToDatabase();
-
     const { questionId, userId, hasupVoted, hasdownVoted, path } = params;
-
     let updateQuery = {};
-
     if (hasdownVoted) {
       updateQuery = { $pull: { downvote: userId } };
     } else if (hasupVoted) {
@@ -181,24 +167,19 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
     } else {
       updateQuery = { $addToSet: { downvotes: userId } };
     }
-
     const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
       new: true,
     });
-
     if (!question) {
       throw new Error("Question not found");
     }
-
     // Increment author's reputation
     await User.findByIdAndUpdate(userId, {
       $inc: { reputation: hasdownVoted ? -2 : 2 },
     });
-
     await User.findByIdAndUpdate(question.author, {
       $inc: { reputation: hasdownVoted ? -10 : 10 },
     });
-
     revalidatePath(path);
   } catch (error) {
     console.log(error);
@@ -209,9 +190,7 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
 export async function deleteQuestion(params: DeleteQuestionParams) {
   try {
     connectToDatabase();
-
     const { questionId, path } = params;
-
     await Question.deleteOne({ _id: questionId });
     await Answer.deleteMany({ question: questionId });
     await Interaction.deleteMany({ question: questionId });
@@ -219,7 +198,6 @@ export async function deleteQuestion(params: DeleteQuestionParams) {
       { questions: questionId },
       { $pull: { questions: questionId } }
     );
-
     revalidatePath(path);
   } catch (error) {
     console.log(error);
@@ -229,20 +207,14 @@ export async function deleteQuestion(params: DeleteQuestionParams) {
 export async function editQuestion(params: EditQuestionParams) {
   try {
     connectToDatabase();
-
     const { questionId, title, content, path } = params;
-
     const question = await Question.findById(questionId).populate("tags");
-
     if (!question) {
       throw new Error("Question not found");
     }
-
     question.title = title;
     question.content = content;
-
     await question.save();
-
     revalidatePath(path);
   } catch (error) {
     console.log(error);
