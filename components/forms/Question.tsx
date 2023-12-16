@@ -26,7 +26,7 @@ import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { toast } from "../ui/use-toast";
 
 interface Props {
-  type?: string;
+  type?: "Edit";
   mongoUserId: string;
   questionDetails?: string;
 }
@@ -39,10 +39,10 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
   const pathname = usePathname();
 
   const parsedQuestionDetails = questionDetails
-    ? JSON.parse(questionDetails ?? "")
+    ? JSON.parse(questionDetails ?? "{}")
     : {};
 
-  const groupedTags = parsedQuestionDetails?.tags.map((tag: any) => tag.name);
+  const groupedTags = parsedQuestionDetails?.tags?.map((tag: any) => tag.name);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof QuestionSchema>>({
@@ -113,7 +113,10 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
       if (e.key === "Enter" && field.name === "tags") {
         e.preventDefault();
         const tagInput = e.target as HTMLInputElement;
-        const tagValue = tagInput.value.trim().replace(/\s+/g, "");
+        const tagValue = tagInput.value
+          .trim()
+          .replace(/\s+/g, "")
+          .toUpperCase();
         if (tagValue !== "") {
           if (tagValue.length > 15) {
             return form.setError("tags", {
@@ -268,17 +271,19 @@ export function Question({ type, mongoUserId, questionDetails }: Props) {
                           }`}
                           onClick={() => handleTagRemove(tag, field)}>
                           {tag}
-                          <Image
-                            src="/assets/icons/close.svg"
-                            alt="close icon"
-                            width={12}
-                            height={12}
-                            className={`${
-                              type === "Edit"
-                                ? "cursor-not-allowed"
-                                : "cursor-pointer"
-                            } object-contain invert-0 dark:invert`}
-                          />
+                          {type !== "Edit" ? (
+                            <Image
+                              src="/assets/icons/close.svg"
+                              alt="close icon"
+                              width={12}
+                              height={12}
+                              className={`${
+                                type === "Edit"
+                                  ? "cursor-not-allowed"
+                                  : "cursor-pointer"
+                              } object-contain invert-0 dark:invert`}
+                            />
+                          ) : null}
                         </Badge>
                       ))}
                     </div>
