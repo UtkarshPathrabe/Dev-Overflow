@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FILTER_SEARCH_PARAMS_KEY } from "@/constants";
 import { formUrlQuery } from "@/lib/utils";
 import { IFilterOptions } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -22,12 +23,12 @@ const Filter = ({ filters, otherClasses, containerClasses }: Props) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const paramFilter = searchParams.get("filter");
+  const paramFilter = searchParams.get(FILTER_SEARCH_PARAMS_KEY);
 
   const handleUpdateParams = (value: string) => {
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
-      key: "filter",
+      key: FILTER_SEARCH_PARAMS_KEY,
       value,
     });
     router.push(newUrl, { scroll: false });
