@@ -2,6 +2,7 @@ import QuestionCard from "@/components/cards/QuestionCard";
 import NoResult from "@/components/shared/NoResult";
 import Pagination from "@/components/shared/Pagination";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
+import { QUERY_SEARCH_PARAMS_KEY } from "@/constants";
 import { getQuestionsByTagId } from "@/lib/actions/tag.action";
 import { URLProps } from "@/types";
 
@@ -9,7 +10,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
   const result = await getQuestionsByTagId({
     tagId: params.id,
     page: searchParams.page ? +searchParams.page : 1,
-    searchQuery: searchParams.q,
+    searchQuery: searchParams[QUERY_SEARCH_PARAMS_KEY],
   });
 
   return (
