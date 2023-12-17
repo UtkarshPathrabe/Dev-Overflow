@@ -4,7 +4,7 @@ import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { Button } from "@/components/ui/button";
-import { QUERY_SEARCH_PARAMS_KEY } from "@/constants";
+import { FILTER_SEARCH_PARAMS_KEY, QUERY_SEARCH_PARAMS_KEY } from "@/constants";
 import { HomePageFilters } from "@/constants/filters";
 import {
   getQuestions,
@@ -35,7 +35,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
   } else {
     result = await getQuestions({
       searchQuery: searchParams[QUERY_SEARCH_PARAMS_KEY],
-      filter: searchParams.filter,
+      filter: searchParams[FILTER_SEARCH_PARAMS_KEY],
       page: searchParams.page ? +searchParams.page : 1,
     });
   }
