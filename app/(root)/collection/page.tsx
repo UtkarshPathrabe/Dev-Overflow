@@ -3,7 +3,7 @@ import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import Pagination from "@/components/shared/Pagination";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
-import { QUERY_SEARCH_PARAMS_KEY } from "@/constants";
+import { FILTER_SEARCH_PARAMS_KEY, QUERY_SEARCH_PARAMS_KEY } from "@/constants";
 import { QuestionFilters } from "@/constants/filters";
 import { getSavedQuestions } from "@/lib/actions/user.action";
 import { SearchParamsProps } from "@/types";
@@ -17,7 +17,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
   const result = await getSavedQuestions({
     clerkId: userId,
     searchQuery: searchParams[QUERY_SEARCH_PARAMS_KEY],
-    filter: searchParams.filter,
+    filter: searchParams[FILTER_SEARCH_PARAMS_KEY],
     page: searchParams.page ? +searchParams.page : 1,
   });
 
@@ -26,7 +26,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
       <h1 className="h1-bold text-dark100_light900">Saved Questions</h1>
       <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearchbar
-          route="/"
+          route="/collection"
           iconPosition="left"
           imgSrc="/assets/icons/search.svg"
           placeholder="Search for questions"
