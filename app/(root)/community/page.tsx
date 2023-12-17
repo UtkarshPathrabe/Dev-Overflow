@@ -7,7 +7,7 @@ import { getAllUsers } from "@/lib/actions/user.action";
 import { SearchParamsProps } from "@/types";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { QUERY_SEARCH_PARAMS_KEY } from "@/constants";
+import { FILTER_SEARCH_PARAMS_KEY, QUERY_SEARCH_PARAMS_KEY } from "@/constants";
 
 export const metadata: Metadata = {
   title: "Community | Dev Overflow",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const Community = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllUsers({
     searchQuery: searchParams[QUERY_SEARCH_PARAMS_KEY],
-    filter: searchParams.filter,
+    filter: searchParams[FILTER_SEARCH_PARAMS_KEY],
     page: searchParams.page ? +searchParams.page : 1,
   });
 
