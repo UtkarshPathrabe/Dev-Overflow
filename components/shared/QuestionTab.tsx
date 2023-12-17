@@ -3,6 +3,7 @@ import { SearchParamsProps } from "@/types";
 import React from "react";
 import QuestionCard from "../cards/QuestionCard";
 import Pagination from "./Pagination";
+import NoResult from "./NoResult";
 
 interface Props extends SearchParamsProps {
   userId: string;
@@ -17,21 +18,32 @@ const QuestionTab = async ({ searchParams, userId, clerkId }: Props) => {
 
   return (
     <>
-      {result.questions.map((question) => (
-        <QuestionCard
-          key={question._id}
-          _id={question._id}
-          clerkId={clerkId}
-          title={question.title}
-          tags={question.tags}
-          author={question.author}
-          upvotes={question.upvotes}
-          downvotes={question.downvotes}
-          views={question.views}
-          answers={question.answers}
-          createdAt={question.createdAt}
+      {result.questions.length === 0 ? (
+        <NoResult
+          title="There's no question to show"
+          description="Be the first to break the silence! 🚀 Ask a Question and kickstart the
+            discussion. our query could be the next big thing others learn from. Get
+            involved! 💡"
+          link="/ask-question"
+          linkTitle="Ask a Question"
         />
-      ))}
+      ) : (
+        result.questions.map((question) => (
+          <QuestionCard
+            key={question._id}
+            _id={question._id}
+            clerkId={clerkId}
+            title={question.title}
+            tags={question.tags}
+            author={question.author}
+            upvotes={question.upvotes}
+            downvotes={question.downvotes}
+            views={question.views}
+            answers={question.answers}
+            createdAt={question.createdAt}
+          />
+        ))
+      )}
       <div className="mt-10">
         <Pagination
           pageNumber={searchParams?.page ? +searchParams.page : 1}
