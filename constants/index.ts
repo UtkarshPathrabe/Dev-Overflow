@@ -77,3 +77,4 @@ export const BADGE_CRITERIA = {
 };
 
 export const THEME_STORAGE_KEY = "theme";
+export const QUERY_SEARCH_PARAMS_KEY = "q";
