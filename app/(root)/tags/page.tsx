@@ -2,7 +2,7 @@ import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import Pagination from "@/components/shared/Pagination";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
-import { QUERY_SEARCH_PARAMS_KEY } from "@/constants";
+import { FILTER_SEARCH_PARAMS_KEY, QUERY_SEARCH_PARAMS_KEY } from "@/constants";
 import { TagFilters } from "@/constants/filters";
 import { getAllTags } from "@/lib/actions/tag.action";
 import { SearchParamsProps } from "@/types";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const Page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllTags({
     searchQuery: searchParams[QUERY_SEARCH_PARAMS_KEY],
-    filter: searchParams.filter,
+    filter: searchParams[FILTER_SEARCH_PARAMS_KEY],
     page: searchParams.page ? +searchParams.page : 1,
   });
 
