@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
+import { QUERY_SEARCH_PARAMS_KEY } from "@/constants";
 
 interface CustomInputProps {
   route: string;
@@ -25,16 +26,16 @@ const LocalSearchbar = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const query = searchParams.get("q");
+  const query = searchParams.get(QUERY_SEARCH_PARAMS_KEY);
 
-  const [search, setSearch] = useState(query || "");
+  const [search, setSearch] = useState(query ?? "");
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (search) {
         const newUrl = formUrlQuery({
           params: searchParams.toString(),
-          key: "q",
+          key: QUERY_SEARCH_PARAMS_KEY,
           value: search,
         });
         router.push(newUrl, { scroll: false });
@@ -43,13 +44,12 @@ const LocalSearchbar = ({
         if (pathname === route) {
           const newUrl = removeKeysFromQuery({
             params: searchParams.toString(),
-            keysToRemove: ["q"],
+            keysToRemove: [QUERY_SEARCH_PARAMS_KEY],
           });
           router.push(newUrl, { scroll: false });
         }
       }
     }, 300);
-
     return () => clearTimeout(delayDebounceFn);
   }, [search, route, pathname, router, searchParams, query]);
 
