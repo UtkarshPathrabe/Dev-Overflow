@@ -79,3 +79,4 @@ export const BADGE_CRITERIA = {
 export const THEME_STORAGE_KEY = "theme";
 export const QUERY_SEARCH_PARAMS_KEY = "q";
 export const FILTER_SEARCH_PARAMS_KEY = "filter";
+export const PAGE_NUMBER_SEARCH_PARAMS_KEY = "page";
