@@ -7,7 +7,11 @@ import { getAllUsers } from "@/lib/actions/user.action";
 import { SearchParamsProps } from "@/types";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { FILTER_SEARCH_PARAMS_KEY, QUERY_SEARCH_PARAMS_KEY } from "@/constants";
+import {
+  FILTER_SEARCH_PARAMS_KEY,
+  PAGE_NUMBER_SEARCH_PARAMS_KEY,
+  QUERY_SEARCH_PARAMS_KEY,
+} from "@/constants";
 
 export const metadata: Metadata = {
   title: "Community | Dev Overflow",
@@ -17,7 +21,9 @@ const Community = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllUsers({
     searchQuery: searchParams[QUERY_SEARCH_PARAMS_KEY],
     filter: searchParams[FILTER_SEARCH_PARAMS_KEY],
-    page: searchParams.page ? +searchParams.page : 1,
+    page: searchParams[PAGE_NUMBER_SEARCH_PARAMS_KEY]
+      ? +searchParams[PAGE_NUMBER_SEARCH_PARAMS_KEY]
+      : 1,
   });
 
   return (
@@ -50,7 +56,11 @@ const Community = async ({ searchParams }: SearchParamsProps) => {
       </section>
       <div className="mt-10">
         <Pagination
-          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          pageNumber={
+            searchParams && searchParams[PAGE_NUMBER_SEARCH_PARAMS_KEY]
+              ? +searchParams[PAGE_NUMBER_SEARCH_PARAMS_KEY]
+              : 1
+          }
           isNext={result.isNext}
         />
       </div>

@@ -2,9 +2,14 @@ import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilters from "@/components/home/HomeFilters";
 import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { Button } from "@/components/ui/button";
-import { FILTER_SEARCH_PARAMS_KEY, QUERY_SEARCH_PARAMS_KEY } from "@/constants";
+import {
+  FILTER_SEARCH_PARAMS_KEY,
+  PAGE_NUMBER_SEARCH_PARAMS_KEY,
+  QUERY_SEARCH_PARAMS_KEY,
+} from "@/constants";
 import { HomePageFilters } from "@/constants/filters";
 import {
   getQuestions,
@@ -24,7 +29,9 @@ export default async function Home({ searchParams }: SearchParamsProps) {
       result = await getRecommendedQuestions({
         userId,
         searchQuery: searchParams[QUERY_SEARCH_PARAMS_KEY],
-        page: searchParams.page ? +searchParams.page : 1,
+        page: searchParams[PAGE_NUMBER_SEARCH_PARAMS_KEY]
+          ? +searchParams[PAGE_NUMBER_SEARCH_PARAMS_KEY]
+          : 1,
       });
     } else {
       result = {
@@ -36,7 +43,9 @@ export default async function Home({ searchParams }: SearchParamsProps) {
     result = await getQuestions({
       searchQuery: searchParams[QUERY_SEARCH_PARAMS_KEY],
       filter: searchParams[FILTER_SEARCH_PARAMS_KEY],
-      page: searchParams.page ? +searchParams.page : 1,
+      page: searchParams[PAGE_NUMBER_SEARCH_PARAMS_KEY]
+        ? +searchParams[PAGE_NUMBER_SEARCH_PARAMS_KEY]
+        : 1,
     });
   }
 
@@ -91,6 +100,16 @@ export default async function Home({ searchParams }: SearchParamsProps) {
             linkTitle="Ask a Question"
           />
         )}
+      </div>
+      <div className="mt-10">
+        <Pagination
+          pageNumber={
+            searchParams && searchParams[PAGE_NUMBER_SEARCH_PARAMS_KEY]
+              ? +searchParams[PAGE_NUMBER_SEARCH_PARAMS_KEY]
+              : 1
+          }
+          isNext={result.isNext}
+        />
       </div>
     </>
   );
