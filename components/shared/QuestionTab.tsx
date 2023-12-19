@@ -32,21 +32,27 @@ const QuestionTab = async ({ searchParams, userId, clerkId }: Props) => {
           linkTitle="Ask a Question"
         />
       ) : (
-        result.questions.map((question) => (
-          <QuestionCard
-            key={question._id}
-            _id={question._id}
-            clerkId={clerkId}
-            title={question.title}
-            tags={question.tags}
-            author={question.author}
-            upvotes={question.upvotes}
-            downvotes={question.downvotes}
-            views={question.views}
-            answers={question.answers}
-            createdAt={question.createdAt}
-          />
-        ))
+        <>
+          <p className="paragraph-semibold text-dark200_light900 px-2">
+            {result.totalQuestions} question
+            {result.totalQuestions === 1 ? "" : "s"} asked
+          </p>
+          {result.questions.map((question) => (
+            <QuestionCard
+              key={question._id}
+              _id={question._id}
+              clerkId={clerkId}
+              title={question.title}
+              tags={question.tags}
+              author={question.author}
+              upvotes={question.upvotes}
+              downvotes={question.downvotes}
+              views={question.views}
+              answers={question.answers}
+              createdAt={question.createdAt}
+            />
+          ))}
+        </>
       )}
       <div className="mt-10">
         <Pagination

@@ -18,10 +18,11 @@ interface Props {
   itemId: string;
   userId: string;
   upvotes: number;
-  hasupVoted: boolean;
+  hasAlreadyUpvoted: boolean;
   downvotes: number;
-  hasdownVoted: boolean;
+  hasAlreadyDownvoted: boolean;
   hasSaved?: boolean;
+  disableVoting: boolean;
 }
 
 const Votes = ({
@@ -29,10 +30,11 @@ const Votes = ({
   itemId,
   userId,
   upvotes,
-  hasupVoted,
+  hasAlreadyUpvoted,
   downvotes,
-  hasdownVoted,
+  hasAlreadyDownvoted,
   hasSaved,
+  disableVoting,
 }: Props) => {
   const pathname = usePathname();
 
@@ -43,13 +45,11 @@ const Votes = ({
         description: "You must be logged in to perform this action",
       });
     }
-
     await toggleSaveQuestion({
       userId: JSON.parse(userId),
       questionId: JSON.parse(itemId),
       path: pathname,
     });
-
     return toast({
       title: `Question ${
         !hasSaved ? "Saved in" : "Removed from"
@@ -60,35 +60,36 @@ const Votes = ({
 
   const handleVote = useCallback(
     async (action: string) => {
+      if (disableVoting) {
+        return;
+      }
       if (!userId) {
         return toast({
           title: "Please log in",
           description: "You must be logged in to perform this action",
         });
       }
-
       if (action === "upvote") {
         if (type === "Question") {
           await upvoteQuestion({
             questionId: JSON.parse(itemId),
             userId: JSON.parse(userId),
-            hasupVoted,
-            hasdownVoted,
+            hasAlreadyUpvoted,
+            hasAlreadyDownvoted,
             path: pathname,
           });
         } else if (type === "Answer") {
           await upvoteAnswer({
             answerId: JSON.parse(itemId),
             userId: JSON.parse(userId),
-            hasupVoted,
-            hasdownVoted,
+            hasAlreadyUpvoted,
+            hasAlreadyDownvoted,
             path: pathname,
           });
         }
-
         return toast({
-          title: `Upvote ${!hasupVoted ? "Successful" : "Removed"}`,
-          variant: !hasupVoted ? "default" : "destructive",
+          title: `Upvote ${!hasAlreadyUpvoted ? "Successful" : "Removed"}`,
+          variant: !hasAlreadyUpvoted ? "default" : "destructive",
         });
       }
 
@@ -97,27 +98,34 @@ const Votes = ({
           await downvoteQuestion({
             questionId: JSON.parse(itemId),
             userId: JSON.parse(userId),
-            hasupVoted,
-            hasdownVoted,
+            hasAlreadyUpvoted,
+            hasAlreadyDownvoted,
             path: pathname,
           });
         } else if (type === "Answer") {
           await downvoteAnswer({
             answerId: JSON.parse(itemId),
             userId: JSON.parse(userId),
-            hasupVoted,
-            hasdownVoted,
+            hasAlreadyUpvoted,
+            hasAlreadyDownvoted,
             path: pathname,
           });
         }
-
         return toast({
-          title: `Downvote ${!hasdownVoted ? "Successful" : "Removed"}`,
-          variant: !hasdownVoted ? "default" : "destructive",
+          title: `Downvote ${!hasAlreadyDownvoted ? "Successful" : "Removed"}`,
+          variant: !hasAlreadyDownvoted ? "default" : "destructive",
         });
       }
     },
-    [hasdownVoted, hasupVoted, itemId, pathname, type, userId]
+    [
+      disableVoting,
+      hasAlreadyDownvoted,
+      hasAlreadyUpvoted,
+      itemId,
+      pathname,
+      type,
+      userId,
+    ]
   );
 
   useEffect(() => {
@@ -135,14 +143,16 @@ const Votes = ({
         <div className="flex-center gap-1.5">
           <Image
             src={
-              hasupVoted
+              hasAlreadyUpvoted
                 ? "/assets/icons/upvoted.svg"
                 : "/assets/icons/upvote.svg"
             }
             width={18}
             height={18}
             alt="upvote"
-            className="cursor-pointer"
+            className={`${
+              disableVoting ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
             onClick={() => handleVote("upvote")}
           />
 
@@ -156,14 +166,16 @@ const Votes = ({
         <div className="flex-center gap-1.5">
           <Image
             src={
-              hasdownVoted
+              hasAlreadyDownvoted
                 ? "/assets/icons/downvoted.svg"
                 : "/assets/icons/downvote.svg"
             }
             width={18}
             height={18}
             alt="downvote"
-            className="cursor-pointer"
+            className={`${
+              disableVoting ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
             onClick={() => handleVote("downvote")}
           />
 
