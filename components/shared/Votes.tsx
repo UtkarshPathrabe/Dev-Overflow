@@ -22,6 +22,7 @@ interface Props {
   downvotes: number;
   hasAlreadyDownvoted: boolean;
   hasSaved?: boolean;
+  disableVoting: boolean;
 }
 
 const Votes = ({
@@ -33,6 +34,7 @@ const Votes = ({
   downvotes,
   hasAlreadyDownvoted,
   hasSaved,
+  disableVoting,
 }: Props) => {
   const pathname = usePathname();
 
@@ -43,13 +45,11 @@ const Votes = ({
         description: "You must be logged in to perform this action",
       });
     }
-
     await toggleSaveQuestion({
       userId: JSON.parse(userId),
       questionId: JSON.parse(itemId),
       path: pathname,
     });
-
     return toast({
       title: `Question ${
         !hasSaved ? "Saved in" : "Removed from"
@@ -60,13 +60,15 @@ const Votes = ({
 
   const handleVote = useCallback(
     async (action: string) => {
+      if (disableVoting) {
+        return;
+      }
       if (!userId) {
         return toast({
           title: "Please log in",
           description: "You must be logged in to perform this action",
         });
       }
-
       if (action === "upvote") {
         if (type === "Question") {
           await upvoteQuestion({
@@ -85,7 +87,6 @@ const Votes = ({
             path: pathname,
           });
         }
-
         return toast({
           title: `Upvote ${!hasAlreadyUpvoted ? "Successful" : "Removed"}`,
           variant: !hasAlreadyUpvoted ? "default" : "destructive",
@@ -110,14 +111,21 @@ const Votes = ({
             path: pathname,
           });
         }
-
         return toast({
           title: `Downvote ${!hasAlreadyDownvoted ? "Successful" : "Removed"}`,
           variant: !hasAlreadyDownvoted ? "default" : "destructive",
         });
       }
     },
-    [hasAlreadyDownvoted, hasAlreadyUpvoted, itemId, pathname, type, userId]
+    [
+      disableVoting,
+      hasAlreadyDownvoted,
+      hasAlreadyUpvoted,
+      itemId,
+      pathname,
+      type,
+      userId,
+    ]
   );
 
   useEffect(() => {
@@ -142,7 +150,9 @@ const Votes = ({
             width={18}
             height={18}
             alt="upvote"
-            className="cursor-pointer"
+            className={`${
+              disableVoting ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
             onClick={() => handleVote("upvote")}
           />
 
@@ -163,7 +173,9 @@ const Votes = ({
             width={18}
             height={18}
             alt="downvote"
-            className="cursor-pointer"
+            className={`${
+              disableVoting ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
             onClick={() => handleVote("downvote")}
           />
 
