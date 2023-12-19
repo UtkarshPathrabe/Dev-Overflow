@@ -46,6 +46,7 @@ const Page = async ({ params, searchParams }: any) => {
               type="Question"
               itemId={JSON.stringify(result._id)}
               userId={JSON.stringify(mongoUser?._id)}
+              disableVoting={result.author.clerkId === clerkId}
               upvotes={result.upvotes.length}
               hasAlreadyUpvoted={result.upvotes.includes(mongoUser?._id)}
               downvotes={result.downvotes.length}
@@ -98,6 +99,7 @@ const Page = async ({ params, searchParams }: any) => {
 
       <AllAnswers
         questionId={result._id}
+        clerkId={clerkId}
         userId={mongoUser?._id}
         totalAnswers={result.answers.length}
         page={searchParams?.page}
