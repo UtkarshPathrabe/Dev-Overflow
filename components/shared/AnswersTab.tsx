@@ -31,17 +31,22 @@ const AnswersTab = async ({ searchParams, userId, clerkId }: Props) => {
           linkTitle="Ask a Question"
         />
       ) : (
-        result.answers.map((item) => (
-          <AnswerCard
-            key={item._id}
-            clerkId={clerkId}
-            _id={item._id}
-            question={item.question}
-            author={item.author}
-            upvotes={item.upvotes.length}
-            createdAt={item.createdAt}
-          />
-        ))
+        <>
+          <p className="paragraph-semibold text-dark200_light900 px-2">
+            {result.totalAnswers} answer{result.totalAnswers === 1 ? "" : "s"}
+          </p>
+          {result.answers.map((item) => (
+            <AnswerCard
+              key={item._id}
+              clerkId={clerkId}
+              _id={item._id}
+              question={item.question}
+              author={item.author}
+              upvotes={item.upvotes.length}
+              createdAt={item.createdAt}
+            />
+          ))}
+        </>
       )}
 
       <div className="mt-10">
