@@ -28,7 +28,7 @@ export async function getUserById(params: any) {
     const user = await User.findOne({ clerkId: userId });
     return user;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -39,7 +39,7 @@ export async function createUser(userData: CreateUserParams) {
     const newUser = await User.create(userData);
     return newUser;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -53,7 +53,7 @@ export async function updateUser(params: UpdateUserParams) {
     });
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -96,7 +96,7 @@ export async function deleteUser(params: DeleteUserParams) {
     const deletedUser = await User.findByIdAndDelete(user._id);
     return deletedUser;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -135,7 +135,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
     const isNext = totalUsers > skipAmount + users.length;
     return { users, isNext };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -166,7 +166,7 @@ export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
     }
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -219,7 +219,7 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
     const savedQuestions = user.saved;
     return { questions: savedQuestions, isNext };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -298,7 +298,7 @@ export async function getUserInfo(params: GetUserByIdParams) {
       reputation: user.reputation,
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -318,7 +318,7 @@ export async function getUserQuestions(params: GetUserStatsParams) {
     const isNextQuestions = totalQuestions > skipAmount + userQuestions.length;
     return { totalQuestions, questions: userQuestions, isNextQuestions };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -338,7 +338,7 @@ export async function getUserAnswers(params: GetUserStatsParams) {
     const isNextAnswer = totalAnswers > skipAmount + userAnswers.length;
     return { totalAnswers, answers: userAnswers, isNextAnswer };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
