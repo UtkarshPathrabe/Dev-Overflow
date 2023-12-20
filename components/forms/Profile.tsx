@@ -18,6 +18,7 @@ import { useCallback, useState } from "react";
 import { ProfileSchema } from "@/lib/validations";
 import { usePathname, useRouter } from "next/navigation";
 import { updateUser } from "@/lib/actions/user.action";
+import { toast } from "../ui/use-toast";
 
 interface Props {
   clerkId: string;
@@ -59,6 +60,10 @@ const Profile = ({ clerkId, user }: Props) => {
         router.back();
       } catch (error) {
         console.log(error);
+        toast({
+          title: "Failed to update profile",
+          variant: "destructive",
+        });
       } finally {
         setIsSubmitting(false);
       }
@@ -70,7 +75,8 @@ const Profile = ({ clerkId, user }: Props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-9 flex w-full flex-col gap-9">
+        className="mt-9 flex w-full flex-col gap-9"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -174,7 +180,8 @@ const Profile = ({ clerkId, user }: Props) => {
           <Button
             type="submit"
             className="primary-gradient w-fit !text-light-900"
-            disabled={isSubmitting}>
+            disabled={isSubmitting}
+          >
             {isSubmitting ? "Saving..." : "Save"}
           </Button>
         </div>
