@@ -19,6 +19,7 @@ import Tag from "@/database/tag.model";
 import Answer from "@/database/answer.model";
 import { BadgeCriteriaType } from "@/types";
 import { assignBadges } from "../utils";
+import Interaction from "@/database/interaction.model";
 
 export async function getUserById(params: any) {
   try {
@@ -65,15 +66,33 @@ export async function deleteUser(params: DeleteUserParams) {
     if (!user) {
       throw new Error("User not found");
     }
-    // Delete user from database
-    // and questions, answers, comments, etc.
-
-    // get user question ids
-    // const userQuestionIds = await Question.find({ author: user._id}).distinct('_id');
-
-    // delete user questions
+    // Delete user's questions
     await Question.deleteMany({ author: user._id });
-    // TODO: delete user answers, comments, etc.
+    // Delete user's answers
+    await Answer.deleteMany({ author: user._id });
+    // Remove user from upvotes of questions
+    await Question.updateMany(
+      { upvotes: { $in: [user._id] } },
+      { $pull: { upvotes: user._id } }
+    );
+    // Remove user from downvotes of questions
+    await Question.updateMany(
+      { downvotes: { $in: [user._id] } },
+      { $pull: { downvotes: user._id } }
+    );
+    // Remove user from upvotes of answers
+    await Answer.updateMany(
+      { upvotes: { $in: [user._id] } },
+      { $pull: { upvotes: user._id } }
+    );
+    // Remove user from downvotes of answers
+    await Answer.updateMany(
+      { downvotes: { $in: [user._id] } },
+      { $pull: { downvotes: user._id } }
+    );
+    // Delete interactions related to the user
+    await Interaction.deleteMany({ user: user._id });
+    // Finally, delete the user
     const deletedUser = await User.findByIdAndDelete(user._id);
     return deletedUser;
   } catch (error) {
