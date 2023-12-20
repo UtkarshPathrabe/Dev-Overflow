@@ -51,12 +51,13 @@ const Theme = () => {
             />
           )}
         </MenubarTrigger>
-        <MenubarContent className="background-light800_dark300 text-dark300_light700 absolute right-[-3rem] mt-3 min-w-[120px] rounded border py-2 dark:border-dark-400 dark:bg-dark-300">
+        <MenubarContent className="absolute right-[-3rem] mt-3 min-w-[120px] rounded border bg-light-900 py-2 dark:border-dark-400 dark:bg-dark-300">
           {themes.map((item) => (
             <MenubarItem
               key={item.value}
               onClick={updateMode(item.value)}
-              className="flex cursor-pointer items-center gap-4 px-2.5 py-2 dark:focus:bg-dark-400">
+              className="flex cursor-pointer items-center gap-4 px-2.5 py-2 hover:bg-light-800 dark:hover:bg-dark-400"
+            >
               <Image
                 src={item.icon}
                 alt={item.value}
@@ -69,7 +70,8 @@ const Theme = () => {
                   mode === item.value
                     ? "text-primary-500"
                     : "text-dark100_light900"
-                }`}>
+                }`}
+              >
                 {item.label}
               </p>
             </MenubarItem>
