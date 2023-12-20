@@ -55,7 +55,7 @@ export async function getQuestions(params: GetQuestionsParams) {
     const isNext = totalQuestions > skipAmount + questions.length;
     return { questions, isNext };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -94,7 +94,7 @@ export async function createQuestion(params: CreateQuestionParams) {
     await User.findByIdAndUpdate(author, { $inc: { reputation: 5 } });
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -111,7 +111,7 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
       });
     return question;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -148,7 +148,7 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
     });
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -184,7 +184,7 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
     });
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -205,7 +205,7 @@ export async function deleteQuestion(params: DeleteQuestionParams) {
     await User.findByIdAndUpdate(question.author, { $inc: { reputation: -5 } });
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -222,7 +222,7 @@ export async function editQuestion(params: EditQuestionParams) {
     await question.save();
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -234,7 +234,7 @@ export async function getHotQuestions() {
       .limit(5);
     return hotQuestions;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }

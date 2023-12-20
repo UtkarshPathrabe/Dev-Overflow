@@ -32,7 +32,7 @@ export async function createAnswer(params: CreateAnswerParams) {
     await User.findByIdAndUpdate(author, { $inc: { reputation: 10 } });
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -70,7 +70,7 @@ export async function getAnswers(params: GetAnswersParams) {
     const isNextAnswer = totalAnswer > skipAmount + answers.length;
     return { answers, isNextAnswer };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -106,7 +106,7 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
     });
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -142,7 +142,7 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
     });
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -164,6 +164,6 @@ export async function deleteAnswer(params: DeleteAnswerParams) {
     await User.findByIdAndUpdate(answer.author, { $inc: { reputation: -10 } });
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }

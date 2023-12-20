@@ -59,7 +59,7 @@ const Answer = ({ question, questionId, authorId }: Props) => {
         variant: "default",
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast({
         title: "Failed to submit answer",
         variant: "destructive",
@@ -92,7 +92,7 @@ const Answer = ({ question, questionId, authorId }: Props) => {
         variant: "default",
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast({
         title: "Failed to generate AI answer",
         variant: "destructive",

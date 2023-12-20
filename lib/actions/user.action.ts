@@ -19,6 +19,7 @@ import Tag from "@/database/tag.model";
 import Answer from "@/database/answer.model";
 import { BadgeCriteriaType } from "@/types";
 import { assignBadges } from "../utils";
+import Interaction from "@/database/interaction.model";
 
 export async function getUserById(params: any) {
   try {
@@ -27,7 +28,7 @@ export async function getUserById(params: any) {
     const user = await User.findOne({ clerkId: userId });
     return user;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -38,7 +39,7 @@ export async function createUser(userData: CreateUserParams) {
     const newUser = await User.create(userData);
     return newUser;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -52,7 +53,7 @@ export async function updateUser(params: UpdateUserParams) {
     });
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -65,19 +66,37 @@ export async function deleteUser(params: DeleteUserParams) {
     if (!user) {
       throw new Error("User not found");
     }
-    // Delete user from database
-    // and questions, answers, comments, etc.
-
-    // get user question ids
-    // const userQuestionIds = await Question.find({ author: user._id}).distinct('_id');
-
-    // delete user questions
+    // Delete user's questions
     await Question.deleteMany({ author: user._id });
-    // TODO: delete user answers, comments, etc.
+    // Delete user's answers
+    await Answer.deleteMany({ author: user._id });
+    // Remove user from upvotes of questions
+    await Question.updateMany(
+      { upvotes: { $in: [user._id] } },
+      { $pull: { upvotes: user._id } }
+    );
+    // Remove user from downvotes of questions
+    await Question.updateMany(
+      { downvotes: { $in: [user._id] } },
+      { $pull: { downvotes: user._id } }
+    );
+    // Remove user from upvotes of answers
+    await Answer.updateMany(
+      { upvotes: { $in: [user._id] } },
+      { $pull: { upvotes: user._id } }
+    );
+    // Remove user from downvotes of answers
+    await Answer.updateMany(
+      { downvotes: { $in: [user._id] } },
+      { $pull: { downvotes: user._id } }
+    );
+    // Delete interactions related to the user
+    await Interaction.deleteMany({ user: user._id });
+    // Finally, delete the user
     const deletedUser = await User.findByIdAndDelete(user._id);
     return deletedUser;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -116,7 +135,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
     const isNext = totalUsers > skipAmount + users.length;
     return { users, isNext };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -147,7 +166,7 @@ export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
     }
     revalidatePath(path);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -200,7 +219,7 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
     const savedQuestions = user.saved;
     return { questions: savedQuestions, isNext };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -279,7 +298,7 @@ export async function getUserInfo(params: GetUserByIdParams) {
       reputation: user.reputation,
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -299,7 +318,7 @@ export async function getUserQuestions(params: GetUserStatsParams) {
     const isNextQuestions = totalQuestions > skipAmount + userQuestions.length;
     return { totalQuestions, questions: userQuestions, isNextQuestions };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -319,7 +338,7 @@ export async function getUserAnswers(params: GetUserStatsParams) {
     const isNextAnswer = totalAnswers > skipAmount + userAnswers.length;
     return { totalAnswers, answers: userAnswers, isNextAnswer };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
