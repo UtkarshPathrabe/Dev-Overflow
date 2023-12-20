@@ -55,7 +55,7 @@ export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
       }))
       .slice(0, limit);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -123,7 +123,7 @@ export async function getAllTags(params: GetAllTagsParams) {
       return { tags, isNext };
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -157,7 +157,7 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
     const questions = tag.questions;
     return { tagTitle: tag.name, questions, isNext };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
@@ -172,7 +172,7 @@ export async function getTopPopularTags() {
     ]);
     return popularTags;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
