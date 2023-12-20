@@ -14,9 +14,16 @@ import QuestionTab from "@/components/shared/QuestionTab";
 import AnswersTab from "@/components/shared/AnswersTab";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Profile | Dev Overflow",
-};
+export async function generateMetadata({
+  params,
+  searchParams,
+}: URLProps): Promise<Metadata> {
+  const userInfo = await getUserInfo({ userId: params.id });
+  return {
+    title: `${userInfo.user.name} Profile | Dev Overflow`,
+    description: `View ${userInfo.user.name}'s profile on Dev Overflow - A community-driven platform for asking and answering programming questions. Get help, share knowledge and collaborate with developers from around the world. Explore topics in web developments, mobile app development, algorithms, data structures and more...`,
+  };
+}
 
 const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
