@@ -8,6 +8,11 @@ import {
 } from "@/constants";
 import { getQuestionsByTagId } from "@/lib/actions/tag.action";
 import { URLProps } from "@/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Questions for a Tag | Dev Overflow",
+};
 
 const Page = async ({ params, searchParams }: URLProps) => {
   const result = await getQuestionsByTagId({
