@@ -78,7 +78,7 @@ const Answer = ({ question, questionId, authorId }: Props) => {
         const editor = editorRef.current as any;
         editor.setContent(formattedAnswer);
       }
-      // Toast...
+      // TODO: Toast...
     } catch (error) {
       console.log(error);
     } finally {
@@ -105,7 +105,8 @@ const Answer = ({ question, questionId, authorId }: Props) => {
 
         <Button
           className="btn light-border-2 gap-1.5 rounded-md px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
-          onClick={generateAIAnswer}>
+          onClick={generateAIAnswer}
+        >
           {isSubmittingAI ? (
             <>Generating...</>
           ) : (
@@ -126,7 +127,8 @@ const Answer = ({ question, questionId, authorId }: Props) => {
       <Form {...form}>
         <form
           className="mt-6 flex w-full flex-col gap-10"
-          onSubmit={form.handleSubmit(handleCreateAnswer)}>
+          onSubmit={form.handleSubmit(handleCreateAnswer)}
+        >
           <FormField
             control={form.control}
             name="answer"
@@ -181,7 +183,8 @@ const Answer = ({ question, questionId, authorId }: Props) => {
             <Button
               type="submit"
               className="primary-gradient w-fit text-white"
-              disabled={isSubmitting}>
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Submitting..." : "Submit"}
             </Button>
           </div>
