@@ -12,6 +12,11 @@ import ProfileLink from "@/components/shared/ProfileLink";
 import Stats from "@/components/shared/Stats";
 import QuestionTab from "@/components/shared/QuestionTab";
 import AnswersTab from "@/components/shared/AnswersTab";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Profile | Dev Overflow",
+};
 
 const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
@@ -91,7 +96,8 @@ const Page = async ({ params, searchParams }: URLProps) => {
           </TabsList>
           <TabsContent
             value="top-posts"
-            className="mt-4 flex w-full flex-col gap-4">
+            className="mt-4 flex w-full flex-col gap-4"
+          >
             <QuestionTab
               searchParams={searchParams}
               userId={userInfo.user._id}
