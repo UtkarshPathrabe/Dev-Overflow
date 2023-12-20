@@ -10,18 +10,50 @@ import {
 import Tag, { ITag } from "@/database/tag.model";
 import Question from "@/database/question.model";
 import { FilterQuery } from "mongoose";
+import Interaction from "@/database/interaction.model";
 
 export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
   try {
     connectToDatabase();
-    const { userId } = params;
+    const { userId, limit = 2 } = params;
     const user = await User.findById(userId);
     if (!user) throw new Error("User not found");
-    // TODO: Find interactions for the user and group by tags...
-    return [
-      { _id: "1", name: "tag" },
-      { _id: "2", name: "tag2" },
-    ];
+    const userInteractions = await Interaction.find({ user: userId }).populate({
+      path: "tags",
+      model: Tag,
+      select: "_id name",
+    });
+    // Group interactions by tags
+    const tagFreqMap: { [key: string]: number } = {};
+    const tagNameToIdMap: { [key: string]: any } = {};
+    for (const interaction of userInteractions) {
+      if (interaction && interaction.tags) {
+        for (const tag of interaction.tags) {
+          if (!tagNameToIdMap[tag.name]) {
+            tagNameToIdMap[tag.name] = tag._id;
+          }
+          if (!tagFreqMap[tag.name]) {
+            tagFreqMap[tag.name] = 1;
+          } else {
+            tagFreqMap[tag.name]++;
+          }
+        }
+      }
+    }
+    // Convert grouped tags object to an array of objects
+    const topInteractedTags = Object.keys(tagFreqMap).map((tagName) => ({
+      _id: tagNameToIdMap[tagName],
+      name: tagName,
+      count: tagFreqMap[tagName],
+    }));
+    // Sort the tags by count in descending order
+    topInteractedTags.sort((a, b) => b.count - a.count);
+    return topInteractedTags
+      .filter((tag) => ({
+        _id: tag._id,
+        name: tag.name,
+      }))
+      .slice(0, limit);
   } catch (error) {
     console.log(error);
     throw error;
