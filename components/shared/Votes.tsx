@@ -52,7 +52,7 @@ const Votes = ({
     });
     return toast({
       title: `Question ${
-        !hasSaved ? "Saved in" : "Removed from"
+        !hasSaved ? "saved in" : "removed from"
       } your collection`,
       variant: !hasSaved ? "default" : "destructive",
     });
@@ -88,7 +88,7 @@ const Votes = ({
           });
         }
         return toast({
-          title: `Upvote ${!hasAlreadyUpvoted ? "Successful" : "Removed"}`,
+          title: `Upvote ${!hasAlreadyUpvoted ? "successful" : "removed"}`,
           variant: !hasAlreadyUpvoted ? "default" : "destructive",
         });
       }
@@ -112,7 +112,7 @@ const Votes = ({
           });
         }
         return toast({
-          title: `Downvote ${!hasAlreadyDownvoted ? "Successful" : "Removed"}`,
+          title: `Downvote ${!hasAlreadyDownvoted ? "successful" : "removed"}`,
           variant: !hasAlreadyDownvoted ? "default" : "destructive",
         });
       }
