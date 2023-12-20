@@ -59,7 +59,7 @@ const Profile = ({ clerkId, user }: Props) => {
         });
         router.back();
       } catch (error) {
-        console.log(error);
+        console.error(error);
         toast({
           title: "Failed to update profile",
           variant: "destructive",
