@@ -10,7 +10,7 @@ const Loading = () => {
         <Skeleton className="h-14 w-28" />
       </div>
 
-      <div className="flex flex-wrap gap-4">
+      <div className="mt-12 flex flex-wrap gap-4">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
           <Skeleton
             key={item}
