@@ -17,7 +17,12 @@ import {
 } from "@/lib/actions/question.action";
 import { SearchParamsProps } from "@/types";
 import { auth } from "@clerk/nextjs";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Home | Dev Overflow",
+};
 
 export default async function Home({ searchParams }: SearchParamsProps) {
   const { userId } = auth();
