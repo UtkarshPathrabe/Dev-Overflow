@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   description:
     "A community-driven platform for asking and answering programming questions. Get help, share knowledge and collaborate with developers from around the world. Explore topics in web developments, mobile app development, algorithms, data structures and more...",
   icons: {
-    icon: "/assets/images/site-logo.svg",
+    icon: "/assets/images/logo.png",
   },
 };
 
@@ -39,7 +39,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               formButtonPrimary: "primary-gradient",
               footerActionLink: "primary-text-gradient hover:text-primary-500",
             },
-          }}>
+          }}
+        >
           <ThemeProvider>{children}</ThemeProvider>
         </ClerkProvider>
       </body>
