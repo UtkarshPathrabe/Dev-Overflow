@@ -11,17 +11,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 interface Props {
   type: string;
@@ -73,46 +62,23 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
           </Tooltip>
         </TooltipProvider>
       )}
-      <AlertDialog>
-        <AlertDialogTrigger>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Image
-                  src="/assets/icons/trash.svg"
-                  alt="Delete"
-                  width={14}
-                  height={14}
-                  className="cursor-pointer object-contain"
-                />
-              </TooltipTrigger>
-              <TooltipContent className="text-dark300_light700">
-                Delete {type}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </AlertDialogTrigger>
-        <AlertDialogContent className="background-light800_dark300 text-dark300_light700">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this{" "}
-              {type === "Question"
-                ? "question and corresponding answers"
-                : "answer"}{" "}
-              from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="border-2">Cancel</AlertDialogCancel>
-            <AlertDialogAction
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Image
+              src="/assets/icons/trash.svg"
+              alt="Delete"
+              width={14}
+              height={14}
+              className="cursor-pointer object-contain"
               onClick={handleDelete}
-              className="w-fit bg-red-500 !text-light-900">
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            />
+          </TooltipTrigger>
+          <TooltipContent className="text-dark300_light700">
+            Delete {type}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 };

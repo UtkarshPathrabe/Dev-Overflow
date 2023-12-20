@@ -72,7 +72,7 @@ const QuestionCard = ({
             textStyles="body-medium text-dark400_light700"
           />
         </div>
-        <div className="flex-end flex-wrap gap-3">
+        <div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">
           <Metric
             imgUrl="/assets/icons/upvote.svg"
             alt="Upvotes"

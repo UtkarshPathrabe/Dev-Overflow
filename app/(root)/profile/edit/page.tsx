@@ -23,8 +23,6 @@ const Page = async ({ params }: ParamsProps) => {
 
   const mongoUser = await getUserById({ userId });
 
-  console.log({ mongoUser });
-
   return (
     <>
       <h1 className="h1-bold text-dark100_light900">Edit Profile</h1>
