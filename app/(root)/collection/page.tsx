@@ -16,6 +16,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Collection | Dev Overflow",
+  description:
+    "View your saved questions on Dev Overflow - A community-driven platform for asking and answering programming questions. Get help, share knowledge and collaborate with developers from around the world. Explore topics in web developments, mobile app development, algorithms, data structures and more...",
 };
 
 export default async function Home({ searchParams }: SearchParamsProps) {
