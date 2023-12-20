@@ -8,9 +8,14 @@ import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Question | Dev Overflow",
+};
 
 const Page = async ({ params, searchParams }: any) => {
   const { userId: clerkId } = auth();
@@ -29,7 +34,8 @@ const Page = async ({ params, searchParams }: any) => {
         <div className="flex w-full flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
           <Link
             href={`/profile/${result.author.clerkId}`}
-            className="flex items-center justify-start gap-1">
+            className="flex items-center justify-start gap-1"
+          >
             <Image
               src={result.author.picture}
               className="rounded-full"
