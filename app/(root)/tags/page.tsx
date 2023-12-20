@@ -15,6 +15,8 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Tags | Dev Overflow",
+  description:
+    "View the tags used on Dev Overflow - A community-driven platform for asking and answering programming questions. Get help, share knowledge and collaborate with developers from around the world. Explore topics in web developments, mobile app development, algorithms, data structures and more...",
 };
 
 const Page = async ({ searchParams }: SearchParamsProps) => {
@@ -49,7 +51,8 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
             <Link
               href={`/tags/${tag._id}`}
               key={tag._id}
-              className="shadow-light100_darknone">
+              className="shadow-light100_darknone"
+            >
               <article className="background-light900_dark200 light-border flex w-full flex-col rounded-2xl border px-8 py-10 sm:w-[260px]">
                 <div className="background-light800_dark400 w-fit rounded-sm px-5 py-1.5">
                   <p className="paragraph-semibold text-dark300_light900">

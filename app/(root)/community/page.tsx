@@ -15,6 +15,8 @@ import {
 
 export const metadata: Metadata = {
   title: "Community | Dev Overflow",
+  description:
+    "View the users' community on Dev Overflow - A community-driven platform for asking and answering programming questions. Get help, share knowledge and collaborate with developers from around the world. Explore topics in web developments, mobile app development, algorithms, data structures and more...",
 };
 
 const Community = async ({ searchParams }: SearchParamsProps) => {
