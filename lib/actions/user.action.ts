@@ -70,26 +70,26 @@ export async function deleteUser(params: DeleteUserParams) {
     await Question.deleteMany({ author: user._id });
     // Delete user's answers
     await Answer.deleteMany({ author: user._id });
-    // Remove user from upvotes of questions
-    await Question.updateMany(
-      { upvotes: { $in: [user._id] } },
-      { $pull: { upvotes: user._id } }
-    );
-    // Remove user from downvotes of questions
-    await Question.updateMany(
-      { downvotes: { $in: [user._id] } },
-      { $pull: { downvotes: user._id } }
-    );
-    // Remove user from upvotes of answers
-    await Answer.updateMany(
-      { upvotes: { $in: [user._id] } },
-      { $pull: { upvotes: user._id } }
-    );
-    // Remove user from downvotes of answers
-    await Answer.updateMany(
-      { downvotes: { $in: [user._id] } },
-      { $pull: { downvotes: user._id } }
-    );
+    // // Remove user from upvotes of questions
+    // await Question.updateMany(
+    //   { upvotes: { $in: [user._id] } },
+    //   { $pull: { upvotes: user._id } }
+    // );
+    // // Remove user from downvotes of questions
+    // await Question.updateMany(
+    //   { downvotes: { $in: [user._id] } },
+    //   { $pull: { downvotes: user._id } }
+    // );
+    // // Remove user from upvotes of answers
+    // await Answer.updateMany(
+    //   { upvotes: { $in: [user._id] } },
+    //   { $pull: { upvotes: user._id } }
+    // );
+    // // Remove user from downvotes of answers
+    // await Answer.updateMany(
+    //   { downvotes: { $in: [user._id] } },
+    //   { $pull: { downvotes: user._id } }
+    // );
     // Delete interactions related to the user
     await Interaction.deleteMany({ user: user._id });
     // Finally, delete the user
