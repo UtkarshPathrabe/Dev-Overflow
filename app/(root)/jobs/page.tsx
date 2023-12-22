@@ -53,7 +53,6 @@ const Jobs = async ({ searchParams }: SearchParamsProps) => {
       : 1,
   });
   const countries = await fetchCountries();
-  console.log({ countries, jobs, userLocation });
 
   return (
     <>
